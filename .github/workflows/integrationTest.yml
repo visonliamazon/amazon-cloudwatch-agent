@@ -129,7 +129,7 @@ jobs:
         with:
           repository: ${{env.CWA_GITHUB_TEST_REPO_NAME}}
           fetch-depth: 0
-          ref: 59c451d6680dc6911faa3484c9d2d517f93cd0f6
+          ref: cfc78e9419001388253c2e305301d1a4f980f200
 
       - name: Set up Go 1.x
         uses: actions/setup-go@v2
@@ -554,7 +554,7 @@ jobs:
             if terraform apply --auto-approve \
               -var="ssh_key_value=${PRIVATE_KEY}" -var="github_test_repo=${{env.CWA_GITHUB_TEST_REPO_URL}}" \
               -var="cwa_github_sha=${GITHUB_SHA}" -var="install_agent=${{ matrix.arrays.installAgentCommand }}" \
-              -var="cwa_test_github_sha"=59c451d6680dc6911faa3484c9d2d517f93cd0f6 \
+              -var="cwa_test_github_sha"=cfc78e9419001388253c2e305301d1a4f980f200 \
               -var="ec2_instance_type=${{ matrix.arrays.instanceType }}" \
               -var="user=${{ matrix.arrays.username }}" \
               -var="ami=${{ matrix.arrays.ami }}" \
