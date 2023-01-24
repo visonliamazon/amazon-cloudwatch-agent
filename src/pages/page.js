@@ -9,40 +9,17 @@ import "../helpers/graph.css";
 export default class Page extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      Receiver: new Receiver("CWAPerformanceMetrics"),
-      data: [], //CWAdata
-      mounted: false,
-      config: JSON.parse(localStorage.getItem("config")) || DEFAULT_CONFIG,
-      synced: false,
-      error: ["error", ""], //"errorType":["error,"warning,"info","success"],"errormsg"
-    };
   }
 
   componentDidMount() {
-    if (!this.state.mounted) {
-      if (localStorage.getItem("config") == null) {
-        localStorage.setItem("config", JSON.stringify(this.state.config));
-      }
-      this.state.Receiver.update().then((updateState) => {
-        this.setState({
-          data: this.state.Receiver.CWAData,
-          synced: updateState[0],
-          error: ["error", updateState[1]],
-        });
-      });
-    }
-    this.setState({ mounted: true });
   }
 
   updateConfig() {
-    this.setState({
-      config: JSON.parse(localStorage.getItem("config")) || DEFAULT_CONFIG,
-    });
+   
   }
 
   updateError(errorType, errorMsg) {
-    this.setState({ error: [errorType, errorMsg] });
+    
   }
 
   updateFreqWarning() {
@@ -61,7 +38,6 @@ export default class Page extends React.Component {
   }
 
   render() {
-    setGlobalCSSVars(this.state.config);
     return <div></div>;
   }
 }

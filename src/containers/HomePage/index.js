@@ -1,7 +1,5 @@
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
-import Page, { ErrorHandler } from "./page";
-import "./homepage.css";
 
 const AppWrapper = styled.div`
   max-width: calc(768px + 16px * 2);
@@ -13,14 +11,15 @@ const AppWrapper = styled.div`
 `;
 
 
-export default function Home()  {
+export default function HomePage()  {
     return (
-      <AppWrapper>
-      <Helmet
-        titleTemplate="Amazon CloudWatch Agent"
-        defaultTitle="Amazon CloudWatch Agent"
-      >
-        <meta name="description" content="Amazon CloudWatch Agent" />
+      <article>
+        <Helmet>
+        <title></title>
+        <meta
+          name="description"
+          content="A React.js Boilerplate application homepage"
+        />
       </Helmet>
       <div class="homepage">
         <h2>CloudWatch Agent Performance Metrics</h2>
@@ -107,5 +106,6 @@ export default function Home()  {
         </section>
         <br />
       </div>
-      </AppWrapper>
+      </article>
 )}
+
