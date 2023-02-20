@@ -1,0 +1,7 @@
+[
+ {
+  "ami": "cloudwatch-agent-integration-test-win-2022*",
+  "os": "win-2022",
+  "test_dir": ""
+ }
+]

@@ -1,0 +1,332 @@
+[
+ {
+  "ami": "cloudwatch-agent-integration-test-ubuntu*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.deb",
+  "caCertPath": "/etc/ssl/certs/ca-certificates.crt",
+  "installAgentCommand": "sudo dpkg -i -E ./amazon-cloudwatch-agent.deb",
+  "os": "ubuntu",
+  "test_dir": "./integration/test/ca_bundle",
+  "username": "ubuntu"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-ubuntu*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.deb",
+  "caCertPath": "/etc/ssl/certs/ca-certificates.crt",
+  "installAgentCommand": "sudo dpkg -i -E ./amazon-cloudwatch-agent.deb",
+  "os": "ubuntu",
+  "test_dir": "./integration/test/cloudwatchlogs",
+  "username": "ubuntu"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-ubuntu*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.deb",
+  "caCertPath": "/etc/ssl/certs/ca-certificates.crt",
+  "installAgentCommand": "sudo dpkg -i -E ./amazon-cloudwatch-agent.deb",
+  "os": "ubuntu",
+  "test_dir": "./integration/test/metrics_number_dimension",
+  "username": "ubuntu"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-al2*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "al2",
+  "test_dir": "./integration/test/ca_bundle",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-al2*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "al2",
+  "test_dir": "./integration/test/cloudwatchlogs",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-al2*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "al2",
+  "test_dir": "./integration/test/metrics_number_dimension",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-rhel8-base*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "rhel8",
+  "test_dir": "./integration/test/ca_bundle",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-rhel8-base*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "rhel8",
+  "test_dir": "./integration/test/cloudwatchlogs",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-rhel8-base*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "rhel8",
+  "test_dir": "./integration/test/metrics_number_dimension",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-rhel8-1*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "rhel8-1",
+  "test_dir": "./integration/test/ca_bundle",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-rhel8-1*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "rhel8-1",
+  "test_dir": "./integration/test/cloudwatchlogs",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-rhel8-1*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "rhel8-1",
+  "test_dir": "./integration/test/metrics_number_dimension",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-rhel8-2*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "rhel8-2",
+  "test_dir": "./integration/test/ca_bundle",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-rhel8-2*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "rhel8-2",
+  "test_dir": "./integration/test/cloudwatchlogs",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-rhel8-2*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "rhel8-2",
+  "test_dir": "./integration/test/metrics_number_dimension",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-rhel8-3*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "rhel8-3",
+  "test_dir": "./integration/test/ca_bundle",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-rhel8-3*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "rhel8-3",
+  "test_dir": "./integration/test/cloudwatchlogs",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-rhel8-3*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "rhel8-3",
+  "test_dir": "./integration/test/metrics_number_dimension",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-rhel8-4*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "rhel8-4",
+  "test_dir": "./integration/test/ca_bundle",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-rhel8-4*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "rhel8-4",
+  "test_dir": "./integration/test/cloudwatchlogs",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-rhel8-4*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "rhel8-4",
+  "test_dir": "./integration/test/metrics_number_dimension",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-ol8-1*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "ol8-1",
+  "test_dir": "./integration/test/ca_bundle",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-ol8-1*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "ol8-1",
+  "test_dir": "./integration/test/cloudwatchlogs",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-ol8-1*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "ol8-1",
+  "test_dir": "./integration/test/metrics_number_dimension",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-ol8-2*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "ol8-2",
+  "test_dir": "./integration/test/ca_bundle",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-ol8-2*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "ol8-2",
+  "test_dir": "./integration/test/cloudwatchlogs",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-ol8-2*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "ol8-2",
+  "test_dir": "./integration/test/metrics_number_dimension",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-ol8-3*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "ol8-3",
+  "test_dir": "./integration/test/ca_bundle",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-ol8-3*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "ol8-3",
+  "test_dir": "./integration/test/cloudwatchlogs",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-ol8-3*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "ol8-3",
+  "test_dir": "./integration/test/metrics_number_dimension",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-ol8-4*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "ol8-4",
+  "test_dir": "./integration/test/ca_bundle",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-ol8-4*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "ol8-4",
+  "test_dir": "./integration/test/cloudwatchlogs",
+  "username": "ec2-user"
+ },
+ {
+  "ami": "cloudwatch-agent-integration-test-ol8-4*",
+  "arc": "amd64",
+  "binaryName": "amazon-cloudwatch-agent.rpm",
+  "caCertPath": "/etc/ssl/certs/ca-bundle.crt",
+  "installAgentCommand": "rpm -U ./amazon-cloudwatch-agent.rpm",
+  "os": "ol8-4",
+  "test_dir": "./integration/test/metrics_number_dimension",
+  "username": "ec2-user"
+ }
+]
