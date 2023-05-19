@@ -986,26 +986,23 @@ jobs:
             else
               cd terraform/eks/daemon
             fi
+            pwd
             terraform init
-#            if
-            terraform apply --auto-approve \
-            -var="test_dir=${{ matrix.arrays.test_dir }}"\
-            -var="cwagent_image_repo=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_INTEGRATION_TEST_REPO }}" \
-            -var="cwagent_image_tag=${{ github.sha }}" \
-            -var="k8s_version=${{ matrix.arrays.k8s_version }}"
-#              terraform destroy -auto-approve
-#            else
-#              terraform destroy -auto-approve && exit 1
-#            fi
-#
-#      - name: Terraform destroy
-#        if: ${{ cancelled() && steps.eks-ec2-integration-test.outputs.cache-hit != 'true' }}
-#        uses: nick-fields/retry@v2
-#        with:
-#          max_attempts: 3
-#          timeout_minutes: 8
-#          retry_wait_seconds: 5
-#          command: cd terraform/eks/daemon && terraform destroy --auto-approve
+             terraform apply --auto-approve \
+              -var="test_dir=${{ matrix.arrays.test_dir }}"\
+              -var="cwagent_image_repo=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_INTEGRATION_TEST_REPO }}" \
+              -var="cwagent_image_tag=${{ github.sha }}" \
+              -var="k8s_version=${{ matrix.arrays.k8s_version }}"; then
+              terraform destroy -auto-approve
+
+      - name: Terraform destroy
+        if: ${{ cancelled() && steps.eks-ec2-integration-test.outputs.cache-hit != 'true' }}
+        uses: nick-fields/retry@v2
+        with:
+          max_attempts: 3
+          timeout_minutes: 8
+          retry_wait_seconds: 5
+          command: cd terraform/eks/daemon && terraform destroy --auto-approve
 
 #  StressTrackingTest:
 #    name: "StressTrackingTest"
