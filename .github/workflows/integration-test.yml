@@ -986,7 +986,7 @@ jobs:
             else
               cd terraform/eks/daemon
             fi
-            
+            pwd
             terraform init
             if terraform apply --auto-approve \
               -var="test_dir=${{ matrix.arrays.test_dir }}"\
