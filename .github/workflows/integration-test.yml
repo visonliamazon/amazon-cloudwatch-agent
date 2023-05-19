@@ -987,7 +987,8 @@ jobs:
               cd terraform/eks/daemon
             fi
             terraform init
-#            if terraform apply --auto-approve \
+#            if
+               terraform apply --auto-approve \
               -var="test_dir=${{ matrix.arrays.test_dir }}"\
               -var="cwagent_image_repo=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_INTEGRATION_TEST_REPO }}" \
               -var="cwagent_image_tag=${{ github.sha }}" \
