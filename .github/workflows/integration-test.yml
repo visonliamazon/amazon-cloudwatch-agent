@@ -249,7 +249,6 @@ jobs:
         if: steps.cached_win_zip.outputs.cache-hit != 'true'
         run: aws s3 cp buildMSI.zip s3://${S3_INTEGRATION_BUCKET}/integration-test/packaging/${{ github.sha }}/buildMSI.zip
 
-# Commented for testing
 #  MakeMacPkg:
 #    name: 'MakeMacPkg'
 #    runs-on: macos-11
