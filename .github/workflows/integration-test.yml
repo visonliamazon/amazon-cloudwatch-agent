@@ -8,9 +8,9 @@ env:
   S3_INTEGRATION_BUCKET: ${{ secrets.S3_INTEGRATION_BUCKET }}
   KEY_NAME: ${{ secrets.KEY_NAME }}
   ECR_INTEGRATION_TEST_REPO: "cwagent-integration-test"
-  CWA_GITHUB_TEST_REPO_NAME: "aws/amazon-cloudwatch-agent-test"
-  CWA_GITHUB_TEST_REPO_URL: "https://github.com/aws/amazon-cloudwatch-agent-test.git"
-  CWA_GITHUB_TEST_REPO_BRANCH: "main"
+  CWA_GITHUB_TEST_REPO_NAME: "movence/amazon-cloudwatch-agent-test"
+  CWA_GITHUB_TEST_REPO_URL: "https://github.com/movence/amazon-cloudwatch-agent-test.git"
+  CWA_GITHUB_TEST_REPO_BRANCH: "gpu-wins"
 
 on:
   push:
@@ -762,6 +762,9 @@ jobs:
             -var="cwa_github_sha=${GITHUB_SHA}"  \
             -var="test_dir=${{ matrix.arrays.test_dir }}" \
             -var="ami=${{ matrix.arrays.ami }}" \
+            -var="github_test_repo=${{env.CWA_GITHUB_TEST_REPO_URL}}" \
+            -var="github_test_repo_branch=${{env.CWA_GITHUB_TEST_REPO_BRANCH}}" \
+            -var="cwa_github_sha=${GITHUB_SHA}" \ 
             -var="s3_bucket=${S3_INTEGRATION_BUCKET}" ; then
               terraform destroy -auto-approve
             else
