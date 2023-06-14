@@ -758,16 +758,15 @@ jobs:
             terraform init
             if terraform apply --auto-approve \
             -var="ec2_instance_type=${{ matrix.arrays.instanceType }}" \
-            -var="ssh_key_value=${PRIVATE_KEY}" -var="ssh_key_name=${KEY_NAME}"  \
+            -var="ssh_key_value=${PRIVATE_KEY}" -var="ssh_key_name=${KEY_NAME}" \
             -var="test_name=${{ matrix.arrays.os }}" \
-            -var="cwa_github_sha=${GITHUB_SHA}"  \
+            -var="cwa_github_sha=${GITHUB_SHA}" \
             -var="test_dir=${{ matrix.arrays.test_dir }}" \
             -var="ami=${{ matrix.arrays.ami }}" \
             -var="github_test_repo=${{env.CWA_GITHUB_TEST_REPO_URL}}" \
             -var="github_test_repo_branch=${{env.CWA_GITHUB_TEST_REPO_BRANCH}}" \
-            -var="cwa_github_sha=${GITHUB_SHA}" \ 
-            -var="s3_bucket=${S3_INTEGRATION_BUCKET}" ; then
-              terraform destroy -auto-approve
+            -var="cwa_github_sha=${GITHUB_SHA}" \
+            -var="s3_bucket=${S3_INTEGRATION_BUCKET}" ; then terraform destroy -auto-approve
             else
               terraform destroy -auto-approve && exit 1
             fi
@@ -835,8 +834,7 @@ jobs:
   #           -var="ec2_instance_type=${{ matrix.arrays.instanceType }}" \
   #           -var="cwa_github_sha=${GITHUB_SHA}" -var="ami=${{ matrix.arrays.ami }}" \
   #           -var="test_dir=${{ matrix.arrays.test_dir }}" \
-  #           -var="s3_bucket=${S3_INTEGRATION_BUCKET}" ; then
-  #             terraform destroy -auto-approve
+  #           -var="s3_bucket=${S3_INTEGRATION_BUCKET}" ; then terraform destroy -auto-approve
   #           else
   #             terraform destroy -auto-approve && exit 1
   #           fi
@@ -941,8 +939,7 @@ jobs:
   #             -var="cwagent_image_repo=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_INTEGRATION_TEST_REPO }}"\
   #             -var="cwagent_image_tag=${{ github.sha }}"\
   #             -var="ec2_instance_type=${{ matrix.arrays.instanceType }}" \
-  #             -var="ami=${{ matrix.arrays.ami }}" ; then
-  #             terraform destroy -auto-approve
+  #             -var="ami=${{ matrix.arrays.ami }}" ; then terraform destroy -auto-approve
   #           else
   #             terraform destroy -auto-approve && exit 1
   #           fi
@@ -1008,8 +1005,7 @@ jobs:
   #           if terraform apply --auto-approve\
   #             -var="test_dir=${{ matrix.arrays.test_dir }}"\
   #             -var="cwagent_image_repo=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_INTEGRATION_TEST_REPO }}"\
-  #             -var="cwagent_image_tag=${{ github.sha }}"; then
-  #             terraform destroy -auto-approve
+  #             -var="cwagent_image_tag=${{ github.sha }}"; then terraform destroy -auto-approve
   #           else
   #             terraform destroy -auto-approve && exit 1
   #           fi
@@ -1083,8 +1079,7 @@ jobs:
   #             -var="cwagent_image_tag=${{ github.sha }}" \
   #             -var="ami_type=${{ matrix.arrays.ami }}" \
   #             -var="instance_type=${{ matrix.arrays.instanceType }}" \
-  #             -var="k8s_version=${{ matrix.arrays.k8s_version }}"; then
-  #             terraform destroy -auto-approve
+  #             -var="k8s_version=${{ matrix.arrays.k8s_version }}"; then terraform destroy -auto-approve
   #           else
   #             terraform destroy -auto-approve && exit 1
   #           fi
