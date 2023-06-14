@@ -163,9 +163,9 @@ jobs:
         id: set-matrix
         run: |
           go run --tags=generator generator/test_case_generator.go
+          echo "::set-output name=ec2_windows_matrix::$(echo $(cat generator/resources/ec2_windows_complete_test_matrix.json))"
 #          echo "::set-output name=ec2_gpu_matrix::$(echo $(cat generator/resources/ec2_gpu_complete_test_matrix.json))"
 #          echo "::set-output name=ec2_linux_matrix::$(echo $(cat generator/resources/ec2_linux_complete_test_matrix.json))"
-          echo "::set-output name=ec2_windows_matrix::$(echo $(cat generator/resources/ec2_windows_complete_test_matrix.json))"
 #          echo "::set-output name=ec2_mac_matrix::$(echo $(cat generator/resources/ec2_mac_complete_test_matrix.json))"
 #          echo "::set-output name=ec2_performance_matrix::$(echo $(cat generator/resources/ec2_performance_complete_test_matrix.json))"
 #          echo "::set-output name=ec2_stress_matrix::$(echo $(cat generator/resources/ec2_stress_complete_test_matrix.json))"
