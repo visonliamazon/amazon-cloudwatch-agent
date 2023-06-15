@@ -530,32 +530,29 @@ jobs:
           command: |
             cd terraform/ec2/win
             terraform init
-            if terraform apply --auto-approve \
+            terraform apply --auto-approve \
               -var="ssh_key_value=${PRIVATE_KEY}" -var="ssh_key_name=${KEY_NAME}" \
               -var="github_test_repo=${{env.CWA_GITHUB_TEST_REPO_URL}}" \
               -var="github_test_repo_branch=${{env.CWA_GITHUB_TEST_REPO_BRANCH}}" \
               -var="cwa_github_sha=${GITHUB_SHA}" -var="ami=${{ matrix.arrays.ami }}" \
               -var="test_dir=${{ matrix.arrays.test_dir }}" \
               -var="ec2_instance_type=${{ matrix.arrays.instanceType }}" \
-              -var="s3_bucket=${S3_INTEGRATION_BUCKET}" ; then terraform destroy -auto-approve
-            else
-              terraform destroy -auto-approve && exit 1
-            fi
+              -var="s3_bucket=${S3_INTEGRATION_BUCKET}"
       #This is here just in case workflow cancel
-      - name: Terraform destroy
-        if: ${{ cancelled() || failure() }}
-        uses: nick-fields/retry@v2
-        with:
-          max_attempts: 3
-          timeout_minutes: 8
-          retry_wait_seconds: 5
-          command: |
-            if "${{ matrix.arrays.os }}" == window
-              cd terraform/ec2/win
-            else
-              cd terraform/ec2/linux
-            fi
-            terraform destroy --auto-approve
+      # - name: Terraform destroy
+      #   if: ${{ cancelled() || failure() }}
+      #   uses: nick-fields/retry@v2
+      #   with:
+      #     max_attempts: 3
+      #     timeout_minutes: 8
+      #     retry_wait_seconds: 5
+      #     command: |
+      #       if "${{ matrix.arrays.os }}" == window
+      #         cd terraform/ec2/win
+      #       else
+      #         cd terraform/ec2/linux
+      #       fi
+      #       terraform destroy --auto-approve
 
   # EC2LinuxIntegrationTest:
   #   needs: [MakeBinary, StartLocalStack, GenerateTestMatrix]
