@@ -639,8 +639,6 @@ jobs:
 #          retry_wait_seconds: 5
 #          command: cd terraform/ec2/linux && terraform destroy --auto-approve
 
-  #revert
-
   EC2WinIntegrationTest:
     needs: [BuildMSI, GenerateTestMatrix]
     name: 'EC2WinIntegrationTest'
