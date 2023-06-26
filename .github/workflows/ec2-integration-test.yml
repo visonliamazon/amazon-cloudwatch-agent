@@ -14,9 +14,6 @@ on:
       test_props:
         required: true
         type: string
-    secrets:
-      envPAT:
-        required: true
 
 jobs:
   EC2IntegrationTest:
