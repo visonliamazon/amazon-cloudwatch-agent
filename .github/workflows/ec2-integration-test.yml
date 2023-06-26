@@ -40,21 +40,21 @@ jobs:
           aws-region: us-west-2
 
       - name: Cache if success
-        id: ${{inputs.job_id}}
+        id: ${{ inputs.job_id }}
         uses: actions/cache@v3
         with:
           path: go.mod
-          key: ${{inputs.job_id}}-${{ github.sha }}-${{ matrix.arrays.os }}-${{ matrix.arrays.arc }}-${{ matrix.arrays.test_dir }}
+          key: ${{ inputs.job_id }}-${{ github.sha }}-${{ matrix.arrays.os }}-${{ matrix.arrays.arc }}-${{ matrix.arrays.test_dir }}
 
       - name: Echo Test Info
-        run: echo run ${{inputs.job_id}} os ${{ matrix.arrays.os }} arc ${{ matrix.arrays.arc }} test dir ${{ matrix.arrays.test_dir }}
+        run: echo run ${{ inputs.job_id }} os ${{ matrix.arrays.os }} arc ${{ matrix.arrays.arc }} test dir ${{ matrix.arrays.test_dir }}
 
       - name: Verify Terraform version
         run: terraform --version
 
       # nick-fields/retry@v2 starts at base dir
       - name: Terraform apply
-        if: steps.${{inputs.job_id}}.outputs.cache-hit != 'true'
+        if: steps.${{ inputs.job_id }}.outputs.cache-hit != 'true'
         uses: nick-fields/retry@v2
         with:
           max_attempts: 3
@@ -96,4 +96,4 @@ jobs:
           max_attempts: 3
           timeout_minutes: 8
           retry_wait_seconds: 5
-          command: cd ${{inputs.test_dir}} && terraform destroy --auto-approve
+          command: cd ${{ inputs.test_dir }} && terraform destroy --auto-approve
