@@ -8,7 +8,7 @@ on:
       test_dir:
         required: true
         type: string
-      job_id:
+      jobid:
         required: true
         type: string
       test_props:
@@ -40,14 +40,14 @@ jobs:
           aws-region: us-west-2
 
       - name: Cache if success
-        id: ${{ inputs.job_id }}
+        id: ${{ inputs.jobid }}
         uses: actions/cache@v3
         with:
           path: go.mod
-          key: ${{ inputs.job_id }}-${{ github.sha }}-${{ matrix.arrays.os }}-${{ matrix.arrays.arc }}-${{ matrix.arrays.test_dir }}
+          key: ${{ inputs.jobid }}-${{ github.sha }}-${{ matrix.arrays.os }}-${{ matrix.arrays.arc }}-${{ matrix.arrays.test_dir }}
 
       - name: Echo Test Info
-        run: echo run ${{ inputs.job_id }} os ${{ matrix.arrays.os }} arc ${{ matrix.arrays.arc }} test dir ${{ matrix.arrays.test_dir }}
+        run: echo run ${{ inputs.jobid }} os ${{ matrix.arrays.os }} arc ${{ matrix.arrays.arc }} test dir ${{ matrix.arrays.test_dir }}
 
       - name: Verify Terraform version
         run: terraform --version
