@@ -237,7 +237,7 @@ jobs:
           aws s3 cp terraform.tfstate s3://${S3_INTEGRATION_BUCKET}/integration-test/local-stack-terraform-state/${GITHUB_SHA}/terraform.tfstate
 
   EC2LinuxIntegrationTest:
-    needs: [ MakeBinary, StartLocalStack, GenerateTestMatrix ]
+    needs: [ MakeBinary, StartLocalStack, GenerateTestMatrix, LinuxOnPremIntegrationTest ]
     name: 'EC2Linux'
     uses:  ec2-integration-test.yml
     with:
