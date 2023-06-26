@@ -239,7 +239,7 @@ jobs:
   EC2LinuxIntegrationTest:
     needs: [ MakeBinary, StartLocalStack, GenerateTestMatrix, LinuxOnPremIntegrationTest ]
     name: 'EC2Linux'
-    uses:  .github/workflows/ec2-integration-test.yml
+    uses:  .github/workflows/ec2-integration-test.yml@${{CWA_GITHUB_TEST_REPO_BRANCH}}
     with:
       test_dir: terraform/ec2/linux
       job_id: ec2-linux-integration-test
@@ -248,7 +248,7 @@ jobs:
   LinuxOnPremIntegrationTest:
     needs: [MakeBinary, StartLocalStack, GenerateTestMatrix]
     name: 'OnpremLinux'
-    uses: .github/workflows/ec2-integration-test.yml
+    uses: .github/workflows/ec2-integration-test.yml@{{CWA_GITHUB_TEST_REPO_BRANCH}}
     with:
       test_dir: terraform/ec2/linux
       job_id: ec2-linux-integration-test
