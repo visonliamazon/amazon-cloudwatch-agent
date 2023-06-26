@@ -249,10 +249,10 @@ jobs:
     needs: [MakeBinary, StartLocalStack, GenerateTestMatrix]
     name: 'OnpremLinux'
     uses: ec2-integration-test.yml
-      with:
-        test_dir: terraform/ec2/linux
-        job_id: ec2-linux-integration-test
-        test_props: ${{needs.GenerateTestMatrix.outputs.ec2_linux_onprem_matrix}}
+    with:
+      test_dir: terraform/ec2/linux
+      job_id: ec2-linux-integration-test
+      test_props: ${{needs.GenerateTestMatrix.outputs.ec2_linux_onprem_matrix}}
 
   StopLocalStack:
     name: 'StopLocalStack'
