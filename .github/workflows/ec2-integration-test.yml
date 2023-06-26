@@ -28,6 +28,8 @@ jobs:
       id-token: write
       contents: read
     steps:
+      - env:
+          job_id: ${{ inputs.job_id}}
       - uses: actions/checkout@v3
         with:
           repository: ${{env.CWA_GITHUB_TEST_REPO_NAME}}
@@ -40,21 +42,21 @@ jobs:
           aws-region: us-west-2
 
       - name: Cache if success
-        id: ${{ github.event.inputs.job_id }}
+        id: ${{ env.job_id }}
         uses: actions/cache@v3
         with:
           path: go.mod
-          key: ${{ inputs.job_id }}-${{ github.sha }}-${{ matrix.arrays.os }}-${{ matrix.arrays.arc }}-${{ matrix.arrays.test_dir }}
+          key: ${{ env.job_id }}-${{ github.sha }}-${{ matrix.arrays.os }}-${{ matrix.arrays.arc }}-${{ matrix.arrays.test_dir }}
 
       - name: Echo Test Info
-        run: echo run ${{ inputs.job_id }} os ${{ matrix.arrays.os }} arc ${{ matrix.arrays.arc }} test dir ${{ matrix.arrays.test_dir }}
+        run: echo run ${{ env.job_id }} os ${{ matrix.arrays.os }} arc ${{ matrix.arrays.arc }} test dir ${{ matrix.arrays.test_dir }}
 
       - name: Verify Terraform version
         run: terraform --version
 
       # nick-fields/retry@v2 starts at base dir
       - name: Terraform apply
-        if: steps.${{ inputs.job_id }}.outputs.cache-hit != 'true'
+        if: steps.${{ env.job_id }}.outputs.cache-hit != 'true'
         uses: nick-fields/retry@v2
         with:
           max_attempts: 3
