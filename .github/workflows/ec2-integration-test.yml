@@ -1,6 +1,7 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: MIT
 
+name: Reusable EC2 Integration Test
 on:
   workflow_call:
     inputs:

@@ -251,7 +251,7 @@ jobs:
     uses: ./.github/workflows/ec2-integration-test.yml
     with:
       test_dir: terraform/ec2/linux
-      job_id: ec2-linux-integration-test
+      job_id: linux-onprem-integration-test
       test_props: ${{needs.GenerateTestMatrix.outputs.ec2_linux_onprem_matrix}}
 
   StopLocalStack:
