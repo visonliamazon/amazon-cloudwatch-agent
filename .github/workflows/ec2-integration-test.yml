@@ -17,7 +17,6 @@ on:
 
 jobs:
   EC2IntegrationTest:
-    needs: [ MakeBinary, StartLocalStack, GenerateTestMatrix ]
     name: 'Test'
     runs-on: ubuntu-latest
     strategy:
