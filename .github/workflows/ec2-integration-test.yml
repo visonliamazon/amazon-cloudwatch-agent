@@ -47,7 +47,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{inputs.env.TERRAFORM_AWS_ASSUME_ROLE}}
+          role-to-assume: ${{fromJSON(inputs.env).TERRAFORM_AWS_ASSUME_ROLE}}
           aws-region: us-west-2
 
       - name: Cache if success
@@ -80,10 +80,10 @@ jobs:
             
             terraform init
             if terraform apply --auto-approve \
-              -var="ssh_key_value=${{inputs.env.PRIVATE_KEY}}" -var="github_test_repo=${{inputs.env.CWA_GITHUB_TEST_REPO_URL)" \
+              -var="ssh_key_value=${{fromJSON(inputs.env).PRIVATE_KEY}}" -var="github_test_repo=${{fromJSON(inputs.env).CWA_GITHUB_TEST_REPO_URL)" \
               -var="test_name=${{ matrix.arrays.os }}" \
               -var="cwa_github_sha=${{github.GITHUB_SHA}}" -var="install_agent=${{ matrix.arrays.installAgentCommand }}" \
-              -var="github_test_repo_branch=$CWA_GITHUB_TEST_REPO_BRANCH" \
+              -var="github_test_repo_branch=${{fromJSON(inputs.env).CWA_GITHUB_TEST_REPO_BRANCH}}" \
               -var="ec2_instance_type=${{ matrix.arrays.instanceType }}" \
               -var="user=${{ matrix.arrays.username }}" \
               -var="ami=${{ matrix.arrays.ami }}" \
@@ -91,9 +91,9 @@ jobs:
               -var="arc=${{ matrix.arrays.arc }}" \
               -var="binary_name=${{ matrix.arrays.binaryName }}" \
               -var="local_stack_host_name=${{ needs.StartLocalStack.outputs.local_stack_host_name }}" \
-              -var="s3_bucket=${{inputs.env.S3_INTEGRATION_BUCKET}}" \
+              -var="s3_bucket=${{fromJSON(inputs.env).S3_INTEGRATION_BUCKET}}" \
               -var="plugin_tests='${{ github.event.inputs.plugins }}'" \
-              -var="ssh_key_name=${{inputs.env.KEY_NAME}}" \
+              -var="ssh_key_name=${{fromJSON(inputs.env).KEY_NAME}}" \
               -var="test_dir=${{ matrix.arrays.test_dir }}" \
               -var="agent_start=${{ matrix.arrays.agentStartCommand }}"; then terraform destroy -auto-approve
             else
