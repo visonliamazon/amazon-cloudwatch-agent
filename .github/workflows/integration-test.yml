@@ -255,7 +255,9 @@ jobs:
       test_dir: terraform/ec2/linux
       job_id: linux-onprem-integration-test
       test_props: ${{needs.GenerateTestMatrix.outputs.ec2_linux_onprem_matrix}}
-      env: ${{toJSON(env)}}
+      test_repo_name: ${{env.CWA_GITHUB_TEST_REPO_NAME}}
+      test_repo_url: ${{ env.CWA_GITHUB_TEST_REPO_URL }}
+      test_repo_branch: ${{ env.CWA_GITHUB_TEST_REPO_BRANCH }}
 
   StopLocalStack:
     name: 'StopLocalStack'
