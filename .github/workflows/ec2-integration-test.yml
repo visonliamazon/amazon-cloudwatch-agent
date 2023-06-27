@@ -30,10 +30,6 @@ on:
       test_props:
         required: true
         type: string
-    secrets:
-      access-token:
-        description: 'A token passed from the caller workflow'
-        required: false
 
 jobs:
   EC2IntegrationTest:
@@ -88,7 +84,7 @@ jobs:
             
             terraform init
             if terraform apply --auto-approve \
-              -var="ssh_key_value=${{env.PRIVATE_KEY}}" -var="github_test_repo=${{inputs.test_repo_url)" \
+              -var="ssh_key_value=${{env.PRIVATE_KEY}}" -var="github_test_repo=${{ inputs.test_repo_url }}" \
               -var="test_name=${{ matrix.arrays.os }}" \
               -var="cwa_github_sha=${{github.GITHUB_SHA}}" -var="install_agent=${{ matrix.arrays.installAgentCommand }}" \
               -var="github_test_repo_branch=${{inputs.test_repo_branch}}" \

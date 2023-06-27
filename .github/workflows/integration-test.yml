@@ -236,28 +236,57 @@ jobs:
           echo "::set-output name=local_stack_host_name::$LOCAL_STACK_HOST_NAME" &&
           aws s3 cp terraform.tfstate s3://${S3_INTEGRATION_BUCKET}/integration-test/local-stack-terraform-state/${GITHUB_SHA}/terraform.tfstate
 
+  OutputEnvVariables:
+    name: 'OutputEnvVariables'
+    runs-on: ubuntu-latest
+    outputs:
+      CWA_GITHUB_TEST_REPO_NAME: ${{ steps.set-matrix.outputs.CWA_GITHUB_TEST_REPO_NAME }}
+      CWA_GITHUB_TEST_REPO_URL: ${{ steps.set-matrix.outputs.CWA_GITHUB_TEST_REPO_URL }}
+      CWA_GITHUB_TEST_REPO_BRANCH: ${{ steps.set-matrix.outputs.CWA_GITHUB_TEST_REPO_BRANCH }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: ${{env.CWA_GITHUB_TEST_REPO_NAME}}
+          ref: ${{env.CWA_GITHUB_TEST_REPO_BRANCH}}
+
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v4
+        with:
+          go-version: ~1.19.6
+
+      - name: SetOutputs
+        id: set-outputs
+        run: |
+          echo "::set-output name=CWA_GITHUB_TEST_REPO_NAME::${{ env.CWA_GITHUB_TEST_REPO_NAME }}"
+          echo "::set-output name=CWA_GITHUB_TEST_REPO_URL::${{ env.CWA_GITHUB_TEST_REPO_URL }}"
+          echo "::set-output name=CWA_GITHUB_TEST_REPO_BRANCH::${{ env.CWA_GITHUB_TEST_REPO_BRANCH }}"
+
   EC2LinuxIntegrationTest:
-    needs: [ MakeBinary, StartLocalStack, GenerateTestMatrix, LinuxOnPremIntegrationTest ]
+    needs: [ MakeBinary, StartLocalStack, GenerateTestMatrix, LinuxOnPremIntegrationTest, OutputEnvVariables ]
     name: 'EC2Linux'
     uses:  ./.github/workflows/ec2-integration-test.yml
     with:
-      secrets: inherit
       test_dir: terraform/ec2/linux
       job_id: ec2-linux-integration-test
       test_props: ${{needs.GenerateTestMatrix.outputs.ec2_linux_matrix}}
+      test_repo_name: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_NAME }}
+      test_repo_url: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_URL }}
+      test_repo_branch: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_BRANCH }}
+    secrets: inherit
 
   LinuxOnPremIntegrationTest:
-    needs: [MakeBinary, StartLocalStack, GenerateTestMatrix]
+    needs: [MakeBinary, StartLocalStack, GenerateTestMatrix, OutputEnvVariables]
     name: 'OnpremLinux'
     uses: ./.github/workflows/ec2-integration-test.yml
     with:
-      secrets: inherit
       test_dir: terraform/ec2/linux
       job_id: linux-onprem-integration-test
       test_props: ${{needs.GenerateTestMatrix.outputs.ec2_linux_onprem_matrix}}
-      test_repo_name: ${{env.CWA_GITHUB_TEST_REPO_NAME}}
-      test_repo_url: ${{ env.CWA_GITHUB_TEST_REPO_URL }}
-      test_repo_branch: ${{ env.CWA_GITHUB_TEST_REPO_BRANCH }}
+      test_repo_name: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_NAME }}
+      test_repo_url: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_URL }}
+      test_repo_branch: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_BRANCH }}
+    secrets: inherit
+
 
   StopLocalStack:
     name: 'StopLocalStack'
