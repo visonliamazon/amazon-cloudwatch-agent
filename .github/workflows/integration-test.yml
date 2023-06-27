@@ -10,7 +10,7 @@ env:
   ECR_INTEGRATION_TEST_REPO: "cwagent-integration-test"
   CWA_GITHUB_TEST_REPO_NAME: "ChenaLee/amazon-cloudwatch-agent-test"
   CWA_GITHUB_TEST_REPO_URL: "https://github.com/ChenaLee/amazon-cloudwatch-agent-test.git"
-  CWA_GITHUB_TEST_REPO_BRANCH: "onpremOneTest"
+  CWA_GITHUB_TEST_REPO_BRANCH: "main"
 
 on:
   push:
@@ -146,6 +146,7 @@ jobs:
       ec2_stress_matrix: ${{steps.set-matrix.outputs.ec2_stress_matrix}}
       ec2_userdata_matrix: ${{ steps.set-matrix.outputs.ec2_userdata_matrix }}
       ecs_ec2_launch_daemon_matrix: ${{ steps.set-matrix.outputs.ecs_ec2_launch_daemon_matrix }}
+      ecs_onprem_launch_daemon_matrix: ${{ steps.set-matrix.outputs.ec2_onprem_launch_daemon_matrix }}
       ecs_fargate_matrix: ${{ steps.set-matrix.outputs.ecs_fargate_matrix }}
       eks_daemon_matrix: ${{ steps.set-matrix.outputs.eks_daemon_matrix }}
       eks_deployment_matrix: ${{ steps.set-matrix.outputs.eks_deployment_matrix }}
@@ -173,6 +174,7 @@ jobs:
           echo "::set-output name=ec2_stress_matrix::$(echo $(cat generator/resources/ec2_stress_complete_test_matrix.json))"
           echo "::set-output name=ec2_userdata_matrix::$(echo $(cat generator/resources/ec2_userdata_complete_test_matrix.json))"
           echo "::set-output name=ecs_ec2_launch_daemon_matrix::$(echo $(cat generator/resources/ecs_ec2_daemon_complete_test_matrix.json))"
+          echo "::set-output name=ecs_onprem_launch_daemon_matrix::$(echo $(cat generator/resources/ecs_onprem_daemon_complete_test_matrix.json))"
           echo "::set-output name=ecs_fargate_matrix::$(echo $(cat generator/resources/ecs_fargate_complete_test_matrix.json))"
           echo "::set-output name=eks_daemon_matrix::$(echo $(cat generator/resources/eks_daemon_complete_test_matrix.json))"
           echo "::set-output name=eks_deployment_matrix::$(echo $(cat generator/resources/eks_deployment_complete_test_matrix.json))"
@@ -188,18 +190,19 @@ jobs:
           echo "ec2_stress_matrix: ${{ steps.set-matrix.outputs.ec2_stress_matrix}}"
           echo "ec2_userdata_matrix: ${{ steps.set-matrix.outputs.ec2_userdata_matrix}}"
           echo "ecs_ec2_launch_daemon_matrix: ${{ steps.set-matrix.outputs.ecs_ec2_launch_daemon_matrix }}"
+          echo "ecs_onprem_launch_daemon_matrix: ${{ steps.set-matrix.outputs.ecs_onprem_launch_daemon_matrix }}"
           echo "ecs_fargate_matrix: ${{ steps.set-matrix.outputs.ecs_fargate_matrix }}"
           echo "eks_daemon_matrix: ${{ steps.set-matrix.outputs.eks_daemon_matrix }}"
           echo "eks_deployment_matrix: ${{ steps.set-matrix.outputs.eks_deployment_matrix }}"
 
-  StartLocalStack:
-    name: 'StartLocalStack'
+  ECSEC2IntegrationTest:
+    name: 'ECSEC2IntegrationTest'
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: terraform/ec2/localstack
-    outputs:
-      local_stack_host_name: ${{ steps.localstack.outputs.local_stack_host_name }}
+    needs: [ MakeBinary, GenerateTestMatrix ]
+    strategy:
+      fail-fast: false
+      matrix:
+        arrays: ${{ fromJson(needs.GenerateTestMatrix.outputs.ecs_ec2_launch_daemon_matrix) }}
     permissions:
       id-token: write
       contents: read
@@ -214,111 +217,46 @@ jobs:
         with:
           role-to-assume: ${{ env.TERRAFORM_AWS_ASSUME_ROLE }}
           aws-region: us-west-2
+          role-duration-seconds: ${{ env.TERRAFORM_AWS_ASSUME_ROLE_DURATION }}
+
+      - name: Cache if success
+        id: ecs-ec2-integration-test
+        uses: actions/cache@v3
+        with:
+          path: go.mod
+          key: ecs-ec2-integration-test-${{ github.sha }}-${{ matrix.arrays.os }}-${{ matrix.arrays.test_dir }}
+
+      - name: Login ECR
+        id: login-ecr
+        if: steps.ecs-ec2-integration-test.outputs.cache-hit != 'true'
+        uses: aws-actions/amazon-ecr-login@v1
 
       - name: Verify Terraform version
+        if: steps.ecs-ec2-integration-test.outputs.cache-hit != 'true'
         run: terraform --version
-
-      - name: Terraform init
-        run: terraform init
 
       - name: Terraform apply
-        id: localstack
-        run: >
-          echo run terraform and execute test code &&
-          terraform apply --auto-approve
-          -var="ssh_key_value=${PRIVATE_KEY}"
-          -var="github_test_repo=${{env.CWA_GITHUB_TEST_REPO_URL}}"
-          -var="cwa_github_sha=${GITHUB_SHA}"
-          -var="s3_bucket=${S3_INTEGRATION_BUCKET}"
-          -var="ssh_key_name=${KEY_NAME}" &&
-          LOCAL_STACK_HOST_NAME=$(terraform output -raw public_dns) &&
-          echo $LOCAL_STACK_HOST_NAME &&
-          echo "::set-output name=local_stack_host_name::$LOCAL_STACK_HOST_NAME" &&
-          aws s3 cp terraform.tfstate s3://${S3_INTEGRATION_BUCKET}/integration-test/local-stack-terraform-state/${GITHUB_SHA}/terraform.tfstate
-
-  OutputEnvVariables:
-    name: 'OutputEnvVariables'
-    runs-on: ubuntu-latest
-    outputs:
-      CWA_GITHUB_TEST_REPO_NAME: ${{ steps.set-matrix.outputs.CWA_GITHUB_TEST_REPO_NAME }}
-      CWA_GITHUB_TEST_REPO_URL: ${{ steps.set-matrix.outputs.CWA_GITHUB_TEST_REPO_URL }}
-      CWA_GITHUB_TEST_REPO_BRANCH: ${{ steps.set-matrix.outputs.CWA_GITHUB_TEST_REPO_BRANCH }}
-    steps:
-      - uses: actions/checkout@v3
+        if: steps.ecs-ec2-integration-test.outputs.cache-hit != 'true'
+        uses: nick-fields/retry@v2
         with:
-          repository: ${{env.CWA_GITHUB_TEST_REPO_NAME}}
-          ref: ${{env.CWA_GITHUB_TEST_REPO_BRANCH}}
-
-      - name: Set up Go 1.x
-        uses: actions/setup-go@v4
-        with:
-          go-version: ~1.19.6
-
-      - name: SetOutputs
-        id: set-outputs
-        run: |
-          echo "::set-output name=CWA_GITHUB_TEST_REPO_NAME::${{ env.CWA_GITHUB_TEST_REPO_NAME }}"
-          echo "::set-output name=CWA_GITHUB_TEST_REPO_URL::${{ env.CWA_GITHUB_TEST_REPO_URL }}"
-          echo "::set-output name=CWA_GITHUB_TEST_REPO_BRANCH::${{ env.CWA_GITHUB_TEST_REPO_BRANCH }}"
-
-  EC2LinuxIntegrationTest:
-    needs: [ MakeBinary, StartLocalStack, GenerateTestMatrix, LinuxOnPremIntegrationTest, OutputEnvVariables ]
-    name: 'EC2Linux'
-    uses:  ./.github/workflows/ec2-integration-test.yml
-    with:
-      test_dir: terraform/ec2/linux
-      job_id: ec2-linux-integration-test
-      test_props: ${{needs.GenerateTestMatrix.outputs.ec2_linux_matrix}}
-      test_repo_name: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_NAME }}
-      test_repo_url: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_URL }}
-      test_repo_branch: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_BRANCH }}
-    secrets: inherit
-
-  LinuxOnPremIntegrationTest:
-    needs: [MakeBinary, StartLocalStack, GenerateTestMatrix, OutputEnvVariables]
-    name: 'OnpremLinux'
-    uses: ./.github/workflows/ec2-integration-test.yml
-    with:
-      test_dir: terraform/ec2/linux
-      job_id: linux-onprem-integration-test
-      test_props: ${{needs.GenerateTestMatrix.outputs.ec2_linux_onprem_matrix}}
-      test_repo_name: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_NAME }}
-      test_repo_url: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_URL }}
-      test_repo_branch: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_BRANCH }}
-    secrets: inherit
-
-
-  StopLocalStack:
-    name: 'StopLocalStack'
-    runs-on: ubuntu-latest
-    if: ${{ always() }}
-    needs: [ StartLocalStack, EC2LinuxIntegrationTest ]
-    defaults:
-      run:
-        working-directory: terraform/ec2/localstack
-    permissions:
-      id-token: write
-      contents: read
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: ${{env.CWA_GITHUB_TEST_REPO_NAME}}
-          ref: ${{env.CWA_GITHUB_TEST_REPO_BRANCH}}
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: ${{ env.TERRAFORM_AWS_ASSUME_ROLE }}
-          aws-region: us-west-2
-
-      - name: Copy state
-        run: aws s3 cp s3://${S3_INTEGRATION_BUCKET}/integration-test/local-stack-terraform-state/${GITHUB_SHA}/terraform.tfstate .
-
-      - name: Verify Terraform version
-        run: terraform --version
-
-      - name: Terraform init
-        run: terraform init
-
-      - name: Terraform destroy
-        run: terraform destroy --auto-approve
+          max_attempts: 3
+          timeout_minutes: 15
+          retry_wait_seconds: 5
+          command: |
+            if [ "${{ matrix.arrays.terraform_dir }}" != "" ]; then
+              cd "${{ matrix.arrays.terraform_dir }}"
+            else
+              cd terraform/ecs_ec2/daemon
+            fi
+            
+            terraform init
+            if terraform apply --auto-approve\
+              -var="test_dir=${{ matrix.arrays.test_dir }}"\
+              -var="ec2_instance_type=${{ matrix.arrays.instanceType }}" \
+              -var="cwagent_image_repo=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_INTEGRATION_TEST_REPO }}"\
+              -var="cwagent_image_tag=${{ github.sha }}"\
+              -var="ec2_instance_type=${{ matrix.arrays.instanceType }}" \
+              -var="ami=${{ matrix.arrays.ami }}" ; then echo done applying
+            else
+              echo could not apply
+            fi
