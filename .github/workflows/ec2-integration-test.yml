@@ -14,6 +14,13 @@ on:
       test_props:
         required: true
         type: string
+      env:
+        required: true
+        type: string
+    secrets:
+      access-token:
+        description: 'A token passed from the caller workflow'
+        required: false
 
 jobs:
   EC2IntegrationTest:
@@ -27,15 +34,20 @@ jobs:
       id-token: write
       contents: read
     steps:
+      - name: Echo
+        run: |
+          echo ${{ inputs.env }}
+          echo ${{ fromJSON(inputs.env).CWA_GITHUB_TEST_REPO_NAME}}
+
       - uses: actions/checkout@v3
         with:
-          repository: $CWA_GITHUB_TEST_REPO_NAME
-          ref: $CWA_GITHUB_TEST_REPO_BRANCH
+          repository: ${{inputs.env.CWA_GITHUB_TEST_REPO_NAME}}
+          ref: ${{inputs.env.CWA_GITHUB_TEST_REPO_BRANCH}}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: $TERRAFORM_AWS_ASSUME_ROLE
+          role-to-assume: ${{inputs.env.TERRAFORM_AWS_ASSUME_ROLE}}
           aws-region: us-west-2
 
       - name: Cache if success
@@ -68,9 +80,9 @@ jobs:
             
             terraform init
             if terraform apply --auto-approve \
-              -var="ssh_key_value=${PRIVATE_KEY}" -var="github_test_repo=$CWA_GITHUB_TEST_REPO_URL" \
+              -var="ssh_key_value=${{inputs.env.PRIVATE_KEY}}" -var="github_test_repo=${{inputs.env.CWA_GITHUB_TEST_REPO_URL)" \
               -var="test_name=${{ matrix.arrays.os }}" \
-              -var="cwa_github_sha=${GITHUB_SHA}" -var="install_agent=${{ matrix.arrays.installAgentCommand }}" \
+              -var="cwa_github_sha=${{github.GITHUB_SHA}}" -var="install_agent=${{ matrix.arrays.installAgentCommand }}" \
               -var="github_test_repo_branch=$CWA_GITHUB_TEST_REPO_BRANCH" \
               -var="ec2_instance_type=${{ matrix.arrays.instanceType }}" \
               -var="user=${{ matrix.arrays.username }}" \
@@ -79,9 +91,9 @@ jobs:
               -var="arc=${{ matrix.arrays.arc }}" \
               -var="binary_name=${{ matrix.arrays.binaryName }}" \
               -var="local_stack_host_name=${{ needs.StartLocalStack.outputs.local_stack_host_name }}" \
-              -var="s3_bucket=${S3_INTEGRATION_BUCKET}" \
+              -var="s3_bucket=${{inputs.env.S3_INTEGRATION_BUCKET}}" \
               -var="plugin_tests='${{ github.event.inputs.plugins }}'" \
-              -var="ssh_key_name=${KEY_NAME}" \
+              -var="ssh_key_name=${{inputs.env.KEY_NAME}}" \
               -var="test_dir=${{ matrix.arrays.test_dir }}" \
               -var="agent_start=${{ matrix.arrays.agentStartCommand }}"; then terraform destroy -auto-approve
             else

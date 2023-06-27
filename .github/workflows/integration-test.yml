@@ -241,6 +241,7 @@ jobs:
     name: 'EC2Linux'
     uses:  ./.github/workflows/ec2-integration-test.yml
     with:
+      secrets: inherit
       test_dir: terraform/ec2/linux
       job_id: ec2-linux-integration-test
       test_props: ${{needs.GenerateTestMatrix.outputs.ec2_linux_matrix}}
@@ -250,9 +251,22 @@ jobs:
     name: 'OnpremLinux'
     uses: ./.github/workflows/ec2-integration-test.yml
     with:
+      secrets: inherit
       test_dir: terraform/ec2/linux
       job_id: linux-onprem-integration-test
       test_props: ${{needs.GenerateTestMatrix.outputs.ec2_linux_onprem_matrix}}
+      env: ${{env}}
+
+    LinuxOnPremIntegrationTest2:
+      needs: [ MakeBinary, StartLocalStack, GenerateTestMatrix ]
+      name: 'OnpremLinux'
+      uses: ./.github/workflows/ec2-integration-test.yml
+      with:
+        secrets: inherit
+        test_dir: terraform/ec2/linux
+        job_id: linux-onprem-integration-test
+        test_props: ${{needs.GenerateTestMatrix.outputs.ec2_linux_onprem_matrix}}
+        env: ${{ toJSON(env)}}
 
   StopLocalStack:
     name: 'StopLocalStack'
