@@ -12,6 +12,9 @@ env:
 on:
   workflow_call:
     inputs:
+      github_sha:
+        required: true
+        type: string
       test_repo_name:
         required: true
         type: string
@@ -86,7 +89,7 @@ jobs:
             if terraform apply --auto-approve \
               -var="ssh_key_value=${{env.PRIVATE_KEY}}" -var="github_test_repo=${{ inputs.test_repo_url }}" \
               -var="test_name=${{ matrix.arrays.os }}" \
-              -var="cwa_github_sha=${{github.GITHUB_SHA}}" -var="install_agent=${{ matrix.arrays.installAgentCommand }}" \
+              -var="cwa_github_sha=${{inputs.github_sha}}" -var="install_agent=${{ matrix.arrays.installAgentCommand }}" \
               -var="github_test_repo_branch=${{inputs.test_repo_branch}}" \
               -var="ec2_instance_type=${{ matrix.arrays.instanceType }}" \
               -var="user=${{ matrix.arrays.username }}" \
