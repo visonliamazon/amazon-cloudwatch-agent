@@ -95,7 +95,7 @@ jobs:
               -var="arc=${{ matrix.arrays.arc }}" \
               -var="binary_name=${{ matrix.arrays.binaryName }}" \
               -var="local_stack_host_name=${{ needs.StartLocalStack.outputs.local_stack_host_name }}" \
-              -var="s3_bucket=${env.S3_INTEGRATION_BUCKET}}" \
+              -var="s3_bucket=${{env.S3_INTEGRATION_BUCKET}}" \
               -var="plugin_tests='${{ github.event.inputs.plugins }}'" \
               -var="ssh_key_name=${{env.KEY_NAME}}" \
               -var="test_dir=${{ matrix.arrays.test_dir }}" \
