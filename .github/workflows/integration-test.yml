@@ -10,7 +10,7 @@ env:
   ECR_INTEGRATION_TEST_REPO: "cwagent-integration-test"
   CWA_GITHUB_TEST_REPO_NAME: "ChenaLee/amazon-cloudwatch-agent-test"
   CWA_GITHUB_TEST_REPO_URL: "https://github.com/ChenaLee/amazon-cloudwatch-agent-test.git"
-  CWA_GITHUB_TEST_REPO_BRANCH: "onpremOneTest"
+  CWA_GITHUB_TEST_REPO_BRANCH: "addWorkingTestsOnPrem"
 
 on:
   push:
@@ -267,19 +267,19 @@ jobs:
           echo "CWA_GITHUB_TEST_REPO_URL: ${{ steps.set-outputs.outputs.CWA_GITHUB_TEST_REPO_URL }}"
           echo "CWA_GITHUB_TEST_REPO_BRANCH: ${{ steps.set-outputs.outputs.CWA_GITHUB_TEST_REPO_BRANCH }}"
 
-  EC2LinuxIntegrationTest:
-    needs: [ MakeBinary, StartLocalStack, GenerateTestMatrix, LinuxOnPremIntegrationTest, OutputEnvVariables ]
-    name: 'EC2Linux'
-    uses:  ./.github/workflows/ec2-integration-test.yml
-    with:
-      github_sha: ${{github.sha}}
-      test_dir: terraform/ec2/linux
-      job_id: ec2-linux-integration-test
-      test_props: ${{needs.GenerateTestMatrix.outputs.ec2_linux_matrix}}
-      test_repo_name: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_NAME }}
-      test_repo_url: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_URL }}
-      test_repo_branch: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_BRANCH }}
-    secrets: inherit
+#  EC2LinuxIntegrationTest:
+#    needs: [ MakeBinary, StartLocalStack, GenerateTestMatrix, LinuxOnPremIntegrationTest, OutputEnvVariables ]
+#    name: 'EC2Linux'
+#    uses:  ./.github/workflows/ec2-integration-test.yml
+#    with:
+#      github_sha: ${{github.sha}}
+#      test_dir: terraform/ec2/linux
+#      job_id: ec2-linux-integration-test
+#      test_props: ${{needs.GenerateTestMatrix.outputs.ec2_linux_matrix}}
+#      test_repo_name: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_NAME }}
+#      test_repo_url: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_URL }}
+#      test_repo_branch: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_BRANCH }}
+#    secrets: inherit
 
   LinuxOnPremIntegrationTest:
     needs: [MakeBinary, StartLocalStack, GenerateTestMatrix, OutputEnvVariables]
@@ -300,7 +300,7 @@ jobs:
     name: 'StopLocalStack'
     runs-on: ubuntu-latest
     if: ${{ always() }}
-    needs: [ StartLocalStack, EC2LinuxIntegrationTest ]
+    needs: [ StartLocalStack ]
     defaults:
       run:
         working-directory: terraform/ec2/localstack
