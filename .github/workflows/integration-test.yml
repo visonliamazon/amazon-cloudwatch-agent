@@ -1306,7 +1306,7 @@ jobs:
 
   EC2WinEventsLogPerformanceTrackingTest:
     name: "EC2WinEventsLogPerformanceTrackingTest"
-    needs: [BuildAndUpload, GenerateTestMatrix]
+    needs: [MakeBinary, GenerateTestMatrix]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -1374,7 +1374,7 @@ jobs:
 
   EC2WinEventsLogStressTrackingTest:
     name: "EC2WinEventsLogStressTrackingTest"
-    needs: [BuildAndUpload, GenerateTestMatrix]
+    needs: [MakeBinary, GenerateTestMatrix]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
