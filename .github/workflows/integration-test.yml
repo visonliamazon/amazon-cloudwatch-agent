@@ -975,7 +975,7 @@ jobs:
 
   EC2WinPerformanceTest:
     name: "EC2WinPerformanceTest"
-    needs: [ BuildMSI, GenerateTestMatrix ]
+    needs: [ BuildAndUpload, GenerateTestMatrix ]
     runs-on: ubuntu-latest
     if: false
     strategy:
@@ -1115,7 +1115,7 @@ jobs:
 
   EC2WinStressTrackingTest:
     name: "EC2WinStressTrackingTest"
-    needs: [BuildMSI, GenerateTestMatrix]
+    needs: [BuildAndUpload, GenerateTestMatrix]
     runs-on: ubuntu-latest
     if: false
     strategy:
