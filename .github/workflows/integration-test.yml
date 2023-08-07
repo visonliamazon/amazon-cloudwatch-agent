@@ -13,7 +13,7 @@ env:
   ECR_INTEGRATION_TEST_REPO: "cwagent-integration-test"
   CWA_GITHUB_TEST_REPO_NAME: "zhihonl/amazon-cloudwatch-agent-test"
   CWA_GITHUB_TEST_REPO_URL: "https://github.com/zhihonl/amazon-cloudwatch-agent-test.git"
-  CWA_GITHUB_TEST_REPO_BRANCH: "ecs-metadata"
+  CWA_GITHUB_TEST_REPO_BRANCH: "ecs-metadata-1"
 
 on:
   push:
@@ -641,7 +641,7 @@ jobs:
               -var="ec2_instance_type=${{ matrix.arrays.instanceType }}" \
               -var="metadataEnabled=${{ matrix.arrays.metadataEnabled }}" \
               -var="ami=${{ matrix.arrays.ami }}" ; then
-              terraform destroy -auto-approve
+              sleep 1800
             else
               terraform destroy -auto-approve && exit 1
             fi
