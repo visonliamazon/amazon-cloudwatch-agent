@@ -604,6 +604,7 @@ jobs:
       - name: Cache if success
         id: ecs-ec2-integration-test
         uses: actions/cache@v3
+        if: false
         with:
           path: go.mod
           key: ecs-ec2-integration-test-${{ github.sha }}-${{ matrix.arrays.os }}-${{ matrix.arrays.test_dir }}
@@ -688,6 +689,7 @@ jobs:
       - name: Cache if success
         id: ecs-fargate-integration-test
         uses: actions/cache@v3
+        if: false
         with:
           path: go.mod
           key: ecs-fargate-integration-test-${{ github.sha }}-${{ matrix.arrays.os }}-${{ matrix.arrays.test_dir }}
