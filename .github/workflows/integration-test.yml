@@ -641,13 +641,13 @@ jobs:
               -var="ec2_instance_type=${{ matrix.arrays.instanceType }}" \
               -var="metadataEnabled=${{ matrix.arrays.metadataEnabled }}" \
               -var="ami=${{ matrix.arrays.ami }}" ; then
-              echo Skip
+              echo ${{ matrix.arrays.metadataEnabled }}
             else
-              echo Skip
+              echo ${{ matrix.arrays.metadataEnabled }}
             fi
 
       - name: Terraform destroy
-        if: ${{ cancelled() || failure() }}
+        if: false
         uses: nick-fields/retry@v2
         with:
           max_attempts: 3
