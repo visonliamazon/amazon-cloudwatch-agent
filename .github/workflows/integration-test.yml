@@ -642,9 +642,9 @@ jobs:
               -var="ec2_instance_type=${{ matrix.arrays.instanceType }}" \
               -var="metadataEnabled=${{ matrix.arrays.metadataEnabled }}" \
               -var="ami=${{ matrix.arrays.ami }}" ; then
-              echo ${{ matrix.arrays.metadataEnabled }}
+              terraform destroy --auto-approve
             else
-              echo ${{ matrix.arrays.metadataEnabled }}
+              terraform destroy --auto-approve
             fi
 
       - name: Terraform destroy
