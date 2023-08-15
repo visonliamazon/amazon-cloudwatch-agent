@@ -643,8 +643,6 @@ jobs:
               -var="metadataEnabled=${{ matrix.arrays.metadataEnabled }}" \
               -var="ami=${{ matrix.arrays.ami }}" ; then
               terraform destroy --auto-approve
-            else
-              terraform destroy --auto-approve
             fi
 
       - name: Terraform destroy
