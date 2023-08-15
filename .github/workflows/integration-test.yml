@@ -643,10 +643,12 @@ jobs:
               -var="metadataEnabled=${{ matrix.arrays.metadataEnabled }}" \
               -var="ami=${{ matrix.arrays.ami }}" ; then
               terraform destroy --auto-approve
+            else
+              terraform destroy --auto-approve && exit 1
             fi
 
       - name: Terraform destroy
-        if: false
+        if: ${{ cancelled() || failure() }}
         uses: nick-fields/retry@v2
         with:
           max_attempts: 3
