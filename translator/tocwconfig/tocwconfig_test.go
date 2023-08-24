@@ -16,6 +16,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/aws/amazon-cloudwatch-agent/cfg/envconfig"
+
 	"github.com/BurntSushi/toml"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
