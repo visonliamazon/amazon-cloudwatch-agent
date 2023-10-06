@@ -445,12 +445,12 @@ func generateLogStreamName(fileName string, streamName string) string {
 // Directory should be skipped.
 // This func is to determine whether the file is actually a directory or a symbolic link pointing to a directory
 func isDirectory(filename string) (bool, error) {
-	path, err := filepath.EvalSymlinks(filename)
-	if err != nil {
-		return false, err
-	}
+	//path, err := filepath.EvalSymlinks(filename)
+	//if err != nil {
+	//	return false, err
+	//}
 
-	info, err := os.Stat(path)
+	info, err := os.Stat(filename)
 	if err != nil {
 		return false, err
 	}
