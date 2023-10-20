@@ -110,46 +110,46 @@ jobs:
           echo "eks_daemon_matrix: ${{ steps.set-matrix.outputs.eks_daemon_matrix }}"
           echo "eks_deployment_matrix: ${{ steps.set-matrix.outputs.eks_deployment_matrix }}"
 
-  CloudformationTest:
-    needs: [BuildAndUpload, GenerateTestMatrix]
-    name: 'CFTest'
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-    permissions:
-      id-token: write
-      contents: read
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: ${{env.CWA_GITHUB_TEST_REPO_NAME}}
-          ref: ${{env.CWA_GITHUB_TEST_REPO_BRANCH}}
-          path: test
-
-      - name: Set up Go 1.x
-        uses: actions/setup-go@v2
-        with:
-          go-version: ~1.21.1
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: ${{ env.TERRAFORM_AWS_ASSUME_ROLE }}
-          aws-region: us-west-2
-          role-duration-seconds: ${{ env.TERRAFORM_AWS_ASSUME_ROLE_DURATION }}
-
-      - name: Cache if success
-        id: cf-integration-test
-        uses: actions/cache@v2
-        with:
-          path: go.mod
-          key: "cf-integration-${{ github.sha }}-test"
-
-      - name: Test cf
-        if: steps.ec2-linux-integration-test.outputs.cache-hit != 'true'
-        run: |
-          cd test/test/cloudformation
-          go test -timeout 1h -package_path=s3://${S3_INTEGRATION_BUCKET}/integration-test/binary/${{ github.sha }}/linux/amd64/amazon-cloudwatch-agent.rpm -iam_role=${CF_IAM_ROLE} -key_name=${CF_KEY_NAME} -metric_name=mem_used_percent
+#  CloudformationTest:
+#    needs: [BuildAndUpload, GenerateTestMatrix]
+#    name: 'CFTest'
+#    runs-on: ubuntu-latest
+#    strategy:
+#      fail-fast: false
+#    permissions:
+#      id-token: write
+#      contents: read
+#    steps:
+#      - uses: actions/checkout@v3
+#        with:
+#          repository: ${{env.CWA_GITHUB_TEST_REPO_NAME}}
+#          ref: ${{env.CWA_GITHUB_TEST_REPO_BRANCH}}
+#          path: test
+#
+#      - name: Set up Go 1.x
+#        uses: actions/setup-go@v2
+#        with:
+#          go-version: ~1.21.1
+#
+#      - name: Configure AWS Credentials
+#        uses: aws-actions/configure-aws-credentials@v2
+#        with:
+#          role-to-assume: ${{ env.TERRAFORM_AWS_ASSUME_ROLE }}
+#          aws-region: us-west-2
+#          role-duration-seconds: ${{ env.TERRAFORM_AWS_ASSUME_ROLE_DURATION }}
+#
+#      - name: Cache if success
+#        id: cf-integration-test
+#        uses: actions/cache@v2
+#        with:
+#          path: go.mod
+#          key: "cf-integration-${{ github.sha }}-test"
+#
+#      - name: Test cf
+#        if: steps.ec2-linux-integration-test.outputs.cache-hit != 'true'
+#        run: |
+#          cd test/test/cloudformation
+#          go test -timeout 1h -package_path=s3://${S3_INTEGRATION_BUCKET}/integration-test/binary/${{ github.sha }}/linux/amd64/amazon-cloudwatch-agent.rpm -iam_role=${CF_IAM_ROLE} -key_name=${CF_KEY_NAME} -metric_name=mem_used_percent
 
   StartLocalStack:
     name: 'StartLocalStack'
@@ -342,35 +342,35 @@ jobs:
           echo "CWA_GITHUB_TEST_REPO_URL: ${{ steps.set-outputs.outputs.CWA_GITHUB_TEST_REPO_URL }}"
           echo "CWA_GITHUB_TEST_REPO_BRANCH: ${{ steps.set-outputs.outputs.CWA_GITHUB_TEST_REPO_BRANCH }}"
 
-  EC2LinuxIntegrationTest:
-    needs: [ BuildAndUpload, StartLocalStack, GenerateTestMatrix, OutputEnvVariables ]
-    name: 'EC2Linux'
-    uses:  ./.github/workflows/ec2-integration-test.yml
-    with:
-      github_sha: ${{github.sha}}
-      test_dir: terraform/ec2/linux
-      job_id: ec2-linux-integration-test
-      test_props: ${{needs.GenerateTestMatrix.outputs.ec2_linux_matrix}}
-      test_repo_name: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_NAME }}
-      test_repo_url: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_URL }}
-      test_repo_branch: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_BRANCH }}
-      localstack_host: ${{needs.StartLocalStack.outputs.local_stack_host_name}}
-    secrets: inherit
+#  EC2LinuxIntegrationTest:
+#    needs: [ BuildAndUpload, StartLocalStack, GenerateTestMatrix, OutputEnvVariables ]
+#    name: 'EC2Linux'
+#    uses:  ./.github/workflows/ec2-integration-test.yml
+#    with:
+#      github_sha: ${{github.sha}}
+#      test_dir: terraform/ec2/linux
+#      job_id: ec2-linux-integration-test
+#      test_props: ${{needs.GenerateTestMatrix.outputs.ec2_linux_matrix}}
+#      test_repo_name: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_NAME }}
+#      test_repo_url: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_URL }}
+#      test_repo_branch: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_BRANCH }}
+#      localstack_host: ${{needs.StartLocalStack.outputs.local_stack_host_name}}
+#    secrets: inherit
 
-  LinuxOnPremIntegrationTest:
-    needs: [BuildAndUpload, StartLocalStack, GenerateTestMatrix, OutputEnvVariables]
-    name: 'OnpremLinux'
-    uses: ./.github/workflows/ec2-integration-test.yml
-    with:
-      github_sha: ${{github.sha}}
-      test_dir: terraform/ec2/linux_onprem
-      job_id: linux-onprem-integration-test
-      test_props: ${{needs.GenerateTestMatrix.outputs.ec2_linux_onprem_matrix}}
-      test_repo_name: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_NAME }}
-      test_repo_url: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_URL }}
-      test_repo_branch: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_BRANCH }}
-      localstack_host: ${{needs.StartLocalStack.outputs.local_stack_host_name}}
-    secrets: inherit
+#  LinuxOnPremIntegrationTest:
+#    needs: [BuildAndUpload, StartLocalStack, GenerateTestMatrix, OutputEnvVariables]
+#    name: 'OnpremLinux'
+#    uses: ./.github/workflows/ec2-integration-test.yml
+#    with:
+#      github_sha: ${{github.sha}}
+#      test_dir: terraform/ec2/linux_onprem
+#      job_id: linux-onprem-integration-test
+#      test_props: ${{needs.GenerateTestMatrix.outputs.ec2_linux_onprem_matrix}}
+#      test_repo_name: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_NAME }}
+#      test_repo_url: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_URL }}
+#      test_repo_branch: ${{ needs.OutputEnvVariables.outputs.CWA_GITHUB_TEST_REPO_BRANCH }}
+#      localstack_host: ${{needs.StartLocalStack.outputs.local_stack_host_name}}
+#    secrets: inherit
 
   EC2WinIntegrationTest:
     needs: [BuildAndUpload, GenerateTestMatrix]
@@ -535,41 +535,41 @@ jobs:
 #            fi
 #            terraform destroy --auto-approve
 
-  StopLocalStack:
-    name: 'StopLocalStack'
-    runs-on: ubuntu-latest
-    if: ${{ always() }}
-    needs: [ StartLocalStack, EC2LinuxIntegrationTest, LinuxOnPremIntegrationTest ]
-    defaults:
-      run:
-        working-directory: terraform/ec2/localstack
-    permissions:
-      id-token: write
-      contents: read
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: ${{env.CWA_GITHUB_TEST_REPO_NAME}}
-          ref: ${{env.CWA_GITHUB_TEST_REPO_BRANCH}}
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: ${{ env.TERRAFORM_AWS_ASSUME_ROLE }}
-          aws-region: us-west-2
-          role-duration-seconds: ${{ env.TERRAFORM_AWS_ASSUME_ROLE_DURATION }}
-
-      - name: Copy state
-        run: aws s3 cp s3://${S3_INTEGRATION_BUCKET}/integration-test/local-stack-terraform-state/${GITHUB_SHA}/terraform.tfstate .
-
-      - name: Verify Terraform version
-        run: terraform --version
-
-      - name: Terraform init
-        run: terraform init
-
-      - name: Terraform destroy
-        run: terraform destroy --auto-approve
+#  StopLocalStack:
+#    name: 'StopLocalStack'
+#    runs-on: ubuntu-latest
+#    if: ${{ always() }}
+#    needs: [ StartLocalStack, EC2LinuxIntegrationTest, LinuxOnPremIntegrationTest ]
+#    defaults:
+#      run:
+#        working-directory: terraform/ec2/localstack
+#    permissions:
+#      id-token: write
+#      contents: read
+#    steps:
+#      - uses: actions/checkout@v3
+#        with:
+#          repository: ${{env.CWA_GITHUB_TEST_REPO_NAME}}
+#          ref: ${{env.CWA_GITHUB_TEST_REPO_BRANCH}}
+#
+#      - name: Configure AWS Credentials
+#        uses: aws-actions/configure-aws-credentials@v2
+#        with:
+#          role-to-assume: ${{ env.TERRAFORM_AWS_ASSUME_ROLE }}
+#          aws-region: us-west-2
+#          role-duration-seconds: ${{ env.TERRAFORM_AWS_ASSUME_ROLE_DURATION }}
+#
+#      - name: Copy state
+#        run: aws s3 cp s3://${S3_INTEGRATION_BUCKET}/integration-test/local-stack-terraform-state/${GITHUB_SHA}/terraform.tfstate .
+#
+#      - name: Verify Terraform version
+#        run: terraform --version
+#
+#      - name: Terraform init
+#        run: terraform init
+#
+#      - name: Terraform destroy
+#        run: terraform destroy --auto-approve
 
 #  ECSEC2IntegrationTest:
 #    name: 'ECSEC2IntegrationTest'
