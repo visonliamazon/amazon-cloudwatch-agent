@@ -414,13 +414,16 @@ jobs:
         if: steps.ec2-win-integration-test.outputs.cache-hit != 'true'
         uses: nick-fields/retry@v2
         with:
-          max_attempts: 3
+          max_attempts: 1
           timeout_minutes: 30
           retry_wait_seconds: 5
           command: |
             if [ "${{ matrix.arrays.terraform_dir }}" != "" ]; then
+              echo "directory name is:----------: ${{ matrix.arrays.terraform_dir }}"  
+              echo "directory name found"
               cd "${{ matrix.arrays.terraform_dir }}"
-            else
+            else 
+              echo "directory in -----------:terraform/ec2/win"
               cd terraform/ec2/win
             fi
             terraform init
