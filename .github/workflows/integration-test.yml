@@ -430,7 +430,6 @@ jobs:
             -var="test_name=${{ matrix.arrays.os }}" \
             -var="cwa_github_sha=${GITHUB_SHA}"  \
             -var="test_dir=${{ matrix.arrays.test_dir }}" \
-            -var="ami=${{ matrix.arrays.ami }}" \
             -var="use_ssm=${{ matrix.arrays.useSSM }}" \
             -var="s3_bucket=${S3_INTEGRATION_BUCKET}" ; then
               terraform destroy -auto-approve
