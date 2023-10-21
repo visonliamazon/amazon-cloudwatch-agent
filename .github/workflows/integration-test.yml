@@ -418,6 +418,9 @@ jobs:
           timeout_minutes: 30
           retry_wait_seconds: 5
           command: |
+            echo "ami ID"
+            aws ec2 describe-images —filters "Name=name,Values=Windows_Server-2016-English-Full-Base-*" —query 'Images | [0].{ID:ImageId}' —output text
+            echo "**********"
             if [ "${{ matrix.arrays.terraform_dir }}" != "" ]; then
               echo "directory name is:----------: ${{ matrix.arrays.terraform_dir }}"  
               echo "directory name found"
@@ -426,6 +429,7 @@ jobs:
               echo "directory in -----------:terraform/ec2/win"
               cd terraform/ec2/win
             fi
+            echo "ami value ::::::::: ${{ matrix.arrays.ami }}"
             terraform init
             if terraform apply --auto-approve \
             -var="ec2_instance_type=${{ matrix.arrays.instanceType }}" \
