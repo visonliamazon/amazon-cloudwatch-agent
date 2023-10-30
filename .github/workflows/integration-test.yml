@@ -413,22 +413,18 @@ jobs:
         if: steps.ec2-win-integration-test.outputs.cache-hit != 'true'
         uses: nick-fields/retry@v2
         with:
-          max_attempts: 1
+          max_attempts: 3
           timeout_minutes: 30
           retry_wait_seconds: 5
           command: |
             echo "ami ID"
             aws ec2 describe-images —filters "Name=name,Values=Windows_Server-2016-English-Full-Base-*" —query 'Images | [0].{ID:ImageId}' —output text
-            echo "**********"
             if [ "${{ matrix.arrays.terraform_dir }}" != "" ]; then
               echo "directory name is:----------: ${{ matrix.arrays.terraform_dir }}"
-              echo "directory name found"
               cd "${{ matrix.arrays.terraform_dir }}"
             else
-              echo "directory in -----------:terraform/ec2/win"
               cd terraform/ec2/win
             fi
-            echo "ami value ::::::::: ${{ matrix.arrays.ami }}"
             terraform init
             if terraform apply --auto-approve \
             -var="ec2_instance_type=${{ matrix.arrays.instanceType }}" \
@@ -782,7 +778,7 @@ jobs:
         if: steps.eks-ec2-integration-test.outputs.cache-hit != 'true'
         uses: nick-fields/retry@v2
         with:
-          max_attempts: 1
+          max_attempts: 3
           timeout_minutes: 60 # EKS takes about 20 minutes to spin up a cluster and service on the cluster
           retry_wait_seconds: 5
           command: |
@@ -939,7 +935,7 @@ jobs:
         if: steps.performance-tracking.outputs.cache-hit != 'true'
         uses: nick-fields/retry@v2
         with:
-          max_attempts: 1
+          max_attempts: 3
           timeout_minutes: 60
           retry_wait_seconds: 5
           command: |
@@ -1007,7 +1003,7 @@ jobs:
         if: steps.performance-tracking.outputs.cache-hit != 'true'
         uses: nick-fields/retry@v2
         with:
-          max_attempts: 1
+          max_attempts: 3
           timeout_minutes: 60
           retry_wait_seconds: 5
           command: |
@@ -1078,7 +1074,7 @@ jobs:
         if: steps.stress-tracking.outputs.cache-hit != 'true'
         uses: nick-fields/retry@v2
         with:
-          max_attempts: 1
+          max_attempts: 3
           timeout_minutes: 60
           retry_wait_seconds: 5
           command: |
@@ -1148,7 +1144,7 @@ jobs:
         if: steps.ec2-win-stress-tracking-test.outputs.cache-hit != 'true'
         uses: nick-fields/retry@v2
         with:
-          max_attempts: 1
+          max_attempts: 3
           timeout_minutes: 60
           retry_wait_seconds: 5
           command: |
