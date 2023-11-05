@@ -89,7 +89,6 @@ jobs:
         with:
           path: |
             ~/go/pkg/mod
-            ~/.cache/go-build
           key: v1-go-pkg-mod-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
 
       - name: Import GPG Key
