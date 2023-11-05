@@ -83,12 +83,11 @@ jobs:
           path: go.mod
 
       - name: Cache go
-        # Only skip for integration builds not release builds.
-        if: contains(inputs.BucketKey, 'test') == false || steps.cached_binaries.outputs.cache-hit == false
         uses: actions/cache@v3
         with:
           path: |
             ~/go/pkg/mod
+            ~/.cache/go-build
           key: v1-go-pkg-mod-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
 
       - name: Import GPG Key

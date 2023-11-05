@@ -195,7 +195,6 @@ jobs:
           echo $LOCAL_STACK_HOST_NAME &&
           echo "::set-output name=local_stack_host_name::$LOCAL_STACK_HOST_NAME" &&
           aws s3 cp terraform.tfstate s3://${S3_INTEGRATION_BUCKET}/integration-test/local-stack-terraform-state/${GITHUB_SHA}/terraform.tfstate
-          
 
 #  EC2NvidiaGPUIntegrationTest:
 #    needs: [ BuildAndUpload, StartLocalStack, GenerateTestMatrix ]
