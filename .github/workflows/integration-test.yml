@@ -756,12 +756,12 @@ jobs:
           aws-region: us-west-2
           role-duration-seconds: ${{ env.TERRAFORM_AWS_ASSUME_ROLE_DURATION }}
 
-      - name: Cache if success
-        id: eks-ec2-integration-test
-        uses: actions/cache@v3
-        with:
-          path: go.mod
-          key: eks-ec2-integration-test-${{ github.sha }}-${{ matrix.arrays.os }}-${{ matrix.arrays.test_dir }}
+#      - name: Cache if success
+#        id: eks-ec2-integration-test
+#        uses: actions/cache@v3
+#        with:
+#          path: go.mod
+#          key: eks-ec2-integration-test-${{ github.sha }}-${{ matrix.arrays.os }}-${{ matrix.arrays.test_dir }}
 
       - name: Login ECR
         id: login-ecr
