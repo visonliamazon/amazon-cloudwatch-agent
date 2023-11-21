@@ -150,6 +150,7 @@ jobs:
     name: 'MakeMSIZip'
     runs-on: ubuntu-latest
     needs: [MakeBinary]
+    if: false
     permissions:
       id-token: write
       contents: read
@@ -209,6 +210,7 @@ jobs:
   MakeMacPkg:
     name: 'MakeMacPkg'
     runs-on: macos-11
+    if: false
     permissions:
       id-token: write
       contents: read
@@ -285,6 +287,7 @@ jobs:
     name: 'BuildMSI'
     runs-on: windows-latest
     needs: [MakeMSIZip]
+    if: false
     permissions:
       id-token: write
       contents: read
@@ -325,6 +328,7 @@ jobs:
     name: 'SignMacAndWindowsPackage'
     runs-on: ubuntu-latest
     needs: [BuildMSI, MakeMacPkg]
+    if: false
     permissions:
       id-token: write
       contents: read
