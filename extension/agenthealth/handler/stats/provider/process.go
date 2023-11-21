@@ -74,7 +74,7 @@ func (p *processStats) updateLoop() {
 }
 
 func (p *processStats) refresh() {
-	p.stats.Store(agent.Stats{
+	p.setStats(agent.Stats{
 		CpuPercent:          p.cpuPercent(),
 		MemoryBytes:         p.memoryBytes(),
 		FileDescriptorCount: p.fileDescriptorCount(),

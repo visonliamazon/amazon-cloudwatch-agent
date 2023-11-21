@@ -49,7 +49,7 @@ type flagStats struct {
 var _ FlagStats = (*flagStats)(nil)
 
 func (p *flagStats) update() {
-	p.stats.Store(agent.Stats{
+	p.setStats(agent.Stats{
 		ImdsFallbackSucceed:       p.getIntFlag(FlagIMDSFallbackSucceed, false),
 		SharedConfigFallback:      p.getIntFlag(FlagSharedConfigFallback, false),
 		AppSignals:                p.getIntFlag(FlagAppSignal, false),

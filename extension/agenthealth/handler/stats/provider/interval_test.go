@@ -14,14 +14,15 @@ import (
 )
 
 func TestIntervalStats(t *testing.T) {
-	s := newIntervalStats(time.Millisecond)
-	s.stats.Store(agent.Stats{
+	interval := time.Millisecond
+	s := newIntervalStats(interval)
+	s.setStats(agent.Stats{
 		ThreadCount: aws.Int32(2),
 	})
 	assert.NotNil(t, s.Stats("").ThreadCount)
 	assert.Nil(t, s.Stats("").ThreadCount)
-	time.Sleep(time.Millisecond)
+	time.Sleep(interval)
 	assert.Eventually(t, func() bool {
 		return s.Stats("").ThreadCount != nil
-	}, 5*time.Millisecond, time.Millisecond)
+	}, 5*interval, interval)
 }

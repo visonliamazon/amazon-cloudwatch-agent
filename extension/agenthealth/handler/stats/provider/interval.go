@@ -14,11 +14,10 @@ import (
 // intervalStats restricts the Stats get function to once
 // per interval.
 type intervalStats struct {
-	mu       sync.RWMutex
 	interval time.Duration
 
-	getOnce *sync.Once
-	lastGet time.Time
+	once *sync.Once
+	mu   sync.RWMutex
 
 	stats atomic.Value
 }
@@ -29,10 +28,9 @@ func (p *intervalStats) Stats(string) agent.Stats {
 	p.mu.RLock()
 	defer p.mu.RUnlock()
 	var stats agent.Stats
-	p.getOnce.Do(func() {
-		p.lastGet = time.Now()
+	p.once.Do(func() {
 		stats = p.getStats()
-		go p.allowNextGetAfter(p.interval)
+		time.AfterFunc(p.interval, p.resetOnce)
 	})
 	return stats
 }
@@ -45,16 +43,19 @@ func (p *intervalStats) getStats() agent.Stats {
 	return stats
 }
 
-func (p *intervalStats) allowNextGetAfter(interval time.Duration) {
-	time.Sleep(interval)
+func (p *intervalStats) setStats(stats agent.Stats) {
+	p.stats.Store(stats)
+}
+
+func (p *intervalStats) resetOnce() {
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	p.getOnce = new(sync.Once)
+	p.once = new(sync.Once)
 }
 
 func newIntervalStats(interval time.Duration) *intervalStats {
 	return &intervalStats{
-		getOnce:  new(sync.Once),
+		once:     new(sync.Once),
 		interval: interval,
 	}
 }
