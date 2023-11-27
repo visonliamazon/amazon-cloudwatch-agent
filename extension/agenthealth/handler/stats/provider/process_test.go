@@ -75,7 +75,5 @@ func TestProcessStats(t *testing.T) {
 	mock.err = testErr
 	mock.mu.Unlock()
 	provider.refresh()
-	assert.Eventually(t, func() bool {
-		return provider.getStats() == agent.Stats{}
-	}, 5*time.Millisecond, time.Millisecond)
+	assert.Equal(t, agent.Stats{}, provider.getStats())
 }

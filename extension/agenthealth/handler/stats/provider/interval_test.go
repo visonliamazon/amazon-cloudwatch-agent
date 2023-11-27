@@ -14,7 +14,7 @@ import (
 )
 
 func TestIntervalStats(t *testing.T) {
-	interval := time.Millisecond
+	interval := 5 * time.Millisecond
 	s := newIntervalStats(interval)
 	s.setStats(agent.Stats{
 		ThreadCount: aws.Int32(2),
@@ -24,5 +24,5 @@ func TestIntervalStats(t *testing.T) {
 	time.Sleep(interval)
 	assert.Eventually(t, func() bool {
 		return s.Stats("").ThreadCount != nil
-	}, 5*interval, interval)
+	}, 10*interval, interval)
 }

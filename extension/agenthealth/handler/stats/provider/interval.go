@@ -4,8 +4,8 @@
 package provider
 
 import (
+	"log"
 	"sync"
-	"sync/atomic"
 	"time"
 
 	"github.com/aws/amazon-cloudwatch-agent/extension/agenthealth/handler/stats/agent"
@@ -16,40 +16,44 @@ import (
 type intervalStats struct {
 	interval time.Duration
 
-	once *sync.Once
-	mu   sync.RWMutex
+	lastGet  time.Time
+	once     *sync.Once
+	onceLock sync.RWMutex
 
-	stats atomic.Value
+	stats     agent.Stats
+	statsLock sync.Mutex
 }
 
 var _ agent.StatsProvider = (*intervalStats)(nil)
 
 func (p *intervalStats) Stats(string) agent.Stats {
-	p.mu.RLock()
-	defer p.mu.RUnlock()
+	p.onceLock.RLock()
+	defer p.onceLock.RUnlock()
 	var stats agent.Stats
 	p.once.Do(func() {
 		stats = p.getStats()
+		p.lastGet = time.Now()
 		time.AfterFunc(p.interval, p.resetOnce)
 	})
 	return stats
 }
 
 func (p *intervalStats) getStats() agent.Stats {
-	var stats agent.Stats
-	if value := p.stats.Load(); value != nil {
-		stats = value.(agent.Stats)
-	}
-	return stats
+	p.statsLock.Lock()
+	defer p.statsLock.Unlock()
+	return p.stats
 }
 
 func (p *intervalStats) setStats(stats agent.Stats) {
-	p.stats.Store(stats)
+	p.statsLock.Lock()
+	defer p.statsLock.Unlock()
+	p.stats = stats
 }
 
 func (p *intervalStats) resetOnce() {
-	p.mu.Lock()
-	defer p.mu.Unlock()
+	log.Printf("time taken to reset: %v | %s", time.Since(p.lastGet), p.lastGet)
+	p.onceLock.Lock()
+	defer p.onceLock.Unlock()
 	p.once = new(sync.Once)
 }
 
