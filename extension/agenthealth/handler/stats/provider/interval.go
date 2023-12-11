@@ -4,7 +4,6 @@
 package provider
 
 import (
-	"log"
 	"sync"
 	"time"
 
@@ -16,7 +15,6 @@ import (
 type intervalStats struct {
 	interval time.Duration
 
-	lastGet  time.Time
 	once     *sync.Once
 	onceLock sync.RWMutex
 
@@ -32,7 +30,6 @@ func (p *intervalStats) Stats(string) agent.Stats {
 	var stats agent.Stats
 	p.once.Do(func() {
 		stats = p.getStats()
-		p.lastGet = time.Now()
 		time.AfterFunc(p.interval, p.resetOnce)
 	})
 	return stats
@@ -51,7 +48,6 @@ func (p *intervalStats) setStats(stats agent.Stats) {
 }
 
 func (p *intervalStats) resetOnce() {
-	log.Printf("time taken to reset: %v | %s", time.Since(p.lastGet), p.lastGet)
 	p.onceLock.Lock()
 	defer p.onceLock.Unlock()
 	p.once = new(sync.Once)

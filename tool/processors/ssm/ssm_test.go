@@ -19,6 +19,8 @@ func TestProcessor_NextProcessor(t *testing.T) {
 }
 
 func TestDetermineCreds(t *testing.T) {
+	t.Setenv("AWS_ACCESS_KEY_ID", "test")
+	t.Setenv("AWS_SECRET_ACCESS_KEY", "test")
 	inputChan := testutil.SetUpTestInputStream()
 
 	ctx := new(runtime.Context)
