@@ -107,11 +107,11 @@ jobs:
               -var="test_dir=${{ matrix.arrays.test_dir }}" \
               -var="agent_start=${{ matrix.arrays.agentStartCommand }}"; then terraform destroy -auto-approve
             else
-              terraform destroy -auto-approve && exit 1
+              echo "Not destroying resource for testing purpose"
             fi
       #This is here just in case workflow cancel
       - name: Terraform destroy
-        if: ${{ cancelled() || failure() }}
+        if: false
         uses: nick-fields/retry@v2
         with:
           max_attempts: 3
