@@ -62,6 +62,7 @@ jobs:
       - name: Cache if success
         id: cache_if_success
         uses: actions/cache@v3
+        if: false
         with:
           path: go.mod
           key: cache_if_success-${{ github.sha }}-${{ matrix.arrays.os }}-${{ matrix.arrays.arc }}-${{ matrix.arrays.test_dir }}
@@ -105,7 +106,7 @@ jobs:
               -var="excluded_tests='${{ matrix.arrays.excludedTests }}'" \
               -var="ssh_key_name=${{env.KEY_NAME}}" \
               -var="test_dir=${{ matrix.arrays.test_dir }}" \
-              -var="agent_start=${{ matrix.arrays.agentStartCommand }}"; then terraform destroy -auto-approve
+              -var="agent_start=${{ matrix.arrays.agentStartCommand }}"; then echo "Not destroying resource for testing purpose"
             else
               echo "Not destroying resource for testing purpose"
             fi
